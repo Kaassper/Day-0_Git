@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Inacapito | Registro</title>
+
+  <!-- Fuente y CSS -->
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="static/style.css">
+
+
+</head>
+<body>
+  <main class="auth-container">
+    <section class="auth-card">
+      <h1 class="auth-title">Crear Cuenta</h1>
+      <form class="auth-form">
+        <label for="nombre">Nombre completo</label>
+        <input type="text" id="nombre" name="nombre" placeholder="Ej: Juan Tapia" required>
+
+        <label for="correo">Correo institucional</label>
+        <input type="email" id="correo" name="correo" placeholder="usuario@inacap.cl" required>
+
+        <label for="rut">RUT</label>
+        <input type="text" id="rut" name="rut" placeholder="12.345.678-9" required>
+
+        <label for="carrera">Carrera</label>
+        <input type="text" id="carrera" name="carrera" placeholder="Ej: Ingeniería Informática" required>
+
+        <label for="password">Contraseña</label>
+        <input type="password" id="password" name="password" placeholder="Crea una contraseña segura" required>
+
+        <button type="submit" class="btn-primary">Registrarse</button>
+      </form>
+
+      <div class="auth-footer">
+        <p>¿Ya tienes cuenta?
+          <a href="login.html" class="link-accent">Inicia sesión</a>
+        </p>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
