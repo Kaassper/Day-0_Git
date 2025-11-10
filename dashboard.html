@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Inacap Day 0</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="dashboard-style.css">
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="navbar-brand">
+            <img src="mascot.png" alt="Mascota" class="nav-mascot">
+            <span>Inacap Day 0</span>
+        </div>
+        <div class="nav-menu">
+            <span id="nav-username"></span>
+            <button id="logout-button" class="logout-btn">Cerrar Sesión</button>
+        </div>
+    </nav>
+
+    <main class="main-container">
+
+        <h1 id="welcome-title">¡Hola, ...!</h1>
+
+        <div class="widgets-grid">
+
+            <div class="widget points-card">
+                <h2>Inacapuntos</h2>
+                <div class="points-display">
+                    <span class="coin-icon">💰</span> <span id="points-amount">1782</span>
+                </div>
+            </div>
+
+            <div class="widget map-card">
+                <h2>Mapa Sede</h2>
+                <p>Explora la sede y encuentra tus salas.</p>
+                <button class="widget-btn">Ver Mapa</button>
+            </div>
+
+        </div> <div class="mission-section">
+            <h2>Misión en Marcha...</h2>
+            <div class="mission-list">
+                
+                <div class="mission-item completed">
+                    <span class="mission-icon">✅</span>
+                    <div class="mission-details">
+                        <h3>Visita la Biblioteca</h3>
+                        <p>Estado: Completado</p>
+                    </div>
+                </div>
+
+                <div class="mission-item in-progress">
+                    <span class="mission-icon">🏃‍♂️</span>
+                    <div class="mission-details">
+                        <h3>Dirígete a DAE</h3>
+                        <p>Estado: En Progreso</p>
+                    </div>
+                </div>
+                
+                <div class="mission-item locked">
+                    <span class="mission-icon">🔒</span>
+                    <div class="mission-details">
+                        <h3>Encuentra el CoWork</h3>
+                        <p>Estado: Bloqueado</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </main>
+
+    <script>
+        // 1. Se ejecuta apenas carga la página
+        document.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('accessToken');
+            const username = localStorage.getItem('username');
+
+            // 2. PROTECCIÓN DE RUTA: Si no hay token, lo expulsa al login
+            if (!token) {
+                window.location.href = 'login.html';
+                return; // Detiene la ejecución
+            }
+
+            // 3. PERSONALIZACIÓN: Saluda al usuario
+            if (username) {
+                document.getElementById('welcome-title').textContent = `¡Hola, ${username}!`;
+                document.getElementById('nav-username').textContent = `Usuario: ${username}`;
+            }
+
+            // 4. (FUTURO) Aquí es donde harías el fetch a tu backend
+            // para obtener los Inacapuntos y las misiones reales.
+            // fetchUserData(token); 
+        });
+
+        /*
+        // (FUTURO) Función para cargar datos del backend
+        async function fetchUserData(token) {
+            try {
+                const response = await fetch('http://localhost:5000/api/users/me', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+                if (response.ok) {
+                    const data = await response.json();
+                    document.getElementById('points-amount').textContent = data.puntos;
+                    // ...aquí cargarías la lista de misiones...
+                } else {
+                    // Si el token es inválido, lo expulsa
+                    localStorage.clear();
+                    window.location.href = 'login.html';
+                }
+            } catch (error) {
+                console.error("Error al cargar datos:", error);
+            }
+        }
+        */
+
+        // 5. FUNCIONALIDAD DE LOGOUT
+        document.getElementById('logout-button').addEventListener('click', () => {
+            localStorage.clear(); // Borra el token y el username
+            window.location.href = 'login.html'; // Lo envía al login
+        });
+
+    </script>
+</body>
+</html>

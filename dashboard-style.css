@@ -1,0 +1,196 @@
+/* --- 1. IMPORTAMOS LA FUENTE OFICIAL (Open Sans) --- */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;700&display=swap');
+
+/* --- 2. VARIABLES DE COLOR (Tu paleta de marca) --- */
+:root {
+    --color-red: #cc3333;
+    --color-black: #000000;
+    --color-white: #ffffff;
+    --color-bg-gray: #f4f7f6; /* Fondo de página gris muy claro */
+    --color-text-dark: #333333;
+    --color-text-light: #777777;
+    --color-border: #eeeeee;
+}
+
+/* --- 3. CONFIGURACIÓN GLOBAL --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    background-color: var(--color-bg-gray);
+    color: var(--color-text-dark);
+}
+
+/* --- 4. BARRA DE NAVEGACIÓN --- */
+.navbar {
+    background-color: var(--color-white);
+    padding: 15px 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid var(--color-border);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.navbar-brand {
+    display: flex;
+    align-items: center;
+    font-size: 1.2em;
+    font-weight: 700;
+    color: var(--color-black);
+}
+
+.nav-mascot {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+}
+
+.nav-menu {
+    display: flex;
+    align-items: center;
+}
+
+#nav-username {
+    margin-right: 20px;
+    font-weight: 500;
+    color: var(--color-text-light);
+}
+
+.logout-btn {
+    background-color: var(--color-red);
+    color: var(--color-white);
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 700;
+    transition: background-color 0.3s ease;
+}
+.logout-btn:hover {
+    background-color: #a32929; /* Rojo más oscuro */
+}
+
+/* --- 5. CONTENIDO PRINCIPAL --- */
+.main-container {
+    max-width: 1100px;
+    margin: 30px auto; /* Centra el contenido */
+    padding: 0 20px;
+}
+
+#welcome-title {
+    font-size: 2em;
+    font-weight: 700;
+    color: var(--color-black);
+    margin-bottom: 20px;
+}
+
+/* --- 6. GRID DE WIDGETS (Puntos y Mapa) --- */
+.widgets-grid {
+    display: grid;
+    /* 2 columnas de igual tamaño */
+    grid-template-columns: 1fr 1fr;
+    gap: 25px; /* Espacio entre las tarjetas */
+    margin-bottom: 30px;
+}
+
+.widget {
+    background-color: var(--color-white);
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.widget h2 {
+    font-size: 1.3em;
+    font-weight: 700;
+    color: var(--color-black);
+    margin-bottom: 15px;
+}
+
+/* Tarjeta de Puntos */
+.points-card .points-display {
+    display: flex;
+    align-items: center;
+}
+.points-card .coin-icon {
+    font-size: 3em;
+    margin-right: 15px;
+}
+#points-amount {
+    font-size: 2.5em;
+    font-weight: 700;
+    color: var(--color-red);
+}
+
+/* Tarjeta de Mapa */
+.map-card p {
+    font-size: 1em;
+    color: var(--color-text-light);
+    margin-bottom: 20px;
+}
+.widget-btn {
+    background-color: var(--color-black);
+    color: var(--color-white);
+    border: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 700;
+    font-size: 0.9em;
+}
+
+/* --- 7. SECCIÓN DE MISIONES --- */
+.mission-section h2 {
+    font-size: 1.5em;
+    font-weight: 700;
+    color: var(--color-black);
+    margin-bottom: 20px;
+}
+
+.mission-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.mission-item {
+    background-color: var(--color-white);
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid var(--color-border);
+}
+
+.mission-item .mission-icon {
+    font-size: 1.8em;
+    margin-right: 20px;
+}
+.mission-item .mission-details h3 {
+    font-size: 1.1em;
+    font-weight: 700;
+    color: var(--color-text-dark);
+}
+.mission-item .mission-details p {
+    font-size: 0.9em;
+    color: var(--color-text-light);
+}
+
+/* Estilos de estado de la misión */
+.mission-item.completed {
+    border-left: 5px solid #28a745; /* Verde */
+}
+.mission-item.in-progress {
+    border-left: 5px solid #007bff; /* Azul */
+}
+.mission-item.locked {
+    border-left: 5px solid #aaaaaa; /* Gris */
+    opacity: 0.7;
+}

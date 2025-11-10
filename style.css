@@ -1,0 +1,208 @@
+/* --- 1. IMPORTAMOS LA FUENTE OFICIAL (Open Sans) --- */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;700&display=swap');
+
+/* --- 2. VARIABLES DE COLOR (Nuevo diseño) --- */
+:root {
+    --color-red-bg: #cc3333;       /* Rojo para el fondo de la página y acentos */
+    --color-black-panel: #000000;  /* Panel izquierdo */
+    --color-white-panel: #ffffff;  /* Panel derecho (formulario) */
+    --color-white-text: #ffffff;   /* Texto sobre fondos oscuros */
+    --color-black-text: #000000;   /* Texto sobre fondos claros */
+    --color-gray-text: #777777;    /* Texto para placeholders */
+    --color-border-gray: #dddddd;  /* Bordes de inputs */
+}
+
+/* --- 3. CONFIGURACIÓN GLOBAL (Fondo rojo) --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 500;
+    background-color: var(--color-red-bg); /* FONDO DE PÁGINA ROJO */
+    display: grid;
+    place-items: center;
+    min-height: 100vh;
+}
+
+/* --- 4. CONTENEDOR PRINCIPAL (La tarjeta) --- */
+.container {
+    width: 900px;
+    height: 600px;
+    display: flex;
+    background: var(--color-white-panel);
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+/* --- 5. PANEL IZQUIERDO (NEGRO) --- */
+.left-panel {
+    flex: 1;
+    background: var(--color-black-panel);
+    color: var(--color-white-text);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 40px;
+    position: relative;
+}
+
+.main-title {
+    font-size: 2.2em;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.slogan {
+    font-size: 1.1em;
+    font-weight: 400;
+    max-width: 300px;
+}
+
+.mascot-image {
+    width: 250px;
+    height: auto;
+    margin-top: 30px;
+}
+
+.decorations {
+    position: absolute;
+    bottom: 20px;
+    width: 100%;
+}
+.decorations span {
+    font-size: 1.5em;
+    opacity: 0.3;
+    margin: 0 15px;
+}
+
+/* --- 6. PANEL DERECHO (AHORA BLANCO) --- */
+.right-panel {
+    flex: 1;
+    background: var(--color-white-panel); /* FONDO DE FORMULARIO BLANCO */
+    color: var(--color-black-text);       /* Texto por defecto negro */
+    padding: 40px 50px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* Botones "Iniciar Sesión / Registrarse" */
+.auth-toggle {
+    text-align: right;
+    margin-bottom: 20px;
+}
+.toggle-btn {
+    background: none;
+    border: none;
+    color: var(--color-gray-text); /* Botón inactivo en gris */
+    font-size: 0.9em;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 5px 10px;
+}
+.toggle-btn.active {
+    color: var(--color-black-text); /* 2. "Registrarse" de arriba en NEGRO */
+    border-bottom: 2px solid var(--color-red-bg);
+}
+
+h2 {
+    font-size: 1.8em;
+    font-weight: 700;
+    margin-bottom: 25px;
+    color: var(--color-black-text); /* Título en negro */
+}
+
+/* Estilo del Formulario */
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 0.8em;
+    font-weight: 700;
+    margin-bottom: 5px;
+    color: var(--color-black-text); /* 1. y 3. Labels ("Nombre", "Email", "Contraseña") en NEGRO */
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="password"] {
+    width: 100%;
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid var(--color-border-gray); /* Borde gris claro */
+    color: var(--color-black-text); /* Texto que escribe el usuario es negro */
+    padding: 10px 5px;
+    font-size: 1em;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.form-group input::placeholder {
+    color: var(--color-gray-text); /* Placeholders en gris */
+}
+
+.form-group input:focus {
+    outline: none;
+    border-bottom-color: var(--color-red-bg); /* Acento rojo al hacer foco */
+}
+
+/* Checkbox de Términos */
+.form-group.terms {
+    display: flex;
+    align-items: center;
+    font-size: 0.8em;
+    font-weight: 400;
+    color: var(--color-black-text); /* Texto de "Acepto los..." en negro */
+}
+.form-group.terms input {
+    width: auto;
+    margin-right: 10px;
+}
+.form-group.terms a {
+    color: var(--color-red-bg); /* Enlace en rojo */
+    text-decoration: none;
+}
+.form-group.terms a:hover {
+    text-decoration: underline;
+}
+
+/* Botón de Enviar (NEGRO con texto BLANCO) */
+.submit-btn {
+    width: 100%;
+    padding: 15px;
+    background: var(--color-black-panel); /* Fondo NEGRO */
+    color: var(--color-white-text);      /* 4. "Registrar" de abajo con texto BLANCO */
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 700;
+    font-family: 'Open Sans', sans-serif;
+    transition: background-color 0.3s ease;
+}
+.submit-btn:hover {
+    background-color: #333; /* Un poco más claro al pasar el mouse */
+}
+
+/* --- 7. MENSAJES DE ERROR/ÉXITO --- */
+#message {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 0.9em;
+    font-weight: 500;
+}
+#message.success {
+    color: #28a745; /* Verde */
+}
+#message.error {
+    color: var(--color-red-bg); /* Rojo */
+}
