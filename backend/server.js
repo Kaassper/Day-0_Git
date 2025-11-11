@@ -6,6 +6,8 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const cors = require('cors'); // Para permitir peticiones del frontend
 const authRoute = require('./routes/auth'); // Importamos nuestras rutas de login
+const missionRoute = require('./routes/missions');
+const userRoute = require('./routes/users');
 
 // --- 2. Configuración Inicial ---
 dotenv.config(); // Carga las variables del .env
@@ -27,6 +29,8 @@ mongoose.connect(process.env.MONGO_URI)
 
 // Todo lo que vaya a "/api/auth" usará las reglas de 'authRoute'
 app.use("/api/auth", authRoute);
+app.use("/api/missions", missionRoute);
+app.use("/api/users", userRoute);
 
 // --- 5. Iniciar el Servidor ---
 const PORT = process.env.PORT || 5000;

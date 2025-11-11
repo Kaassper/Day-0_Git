@@ -194,3 +194,159 @@ body {
     border-left: 5px solid #aaaaaa; /* Gris */
     opacity: 0.7;
 }
+
+/* dashboard-style.css (al final del archivo) */
+
+/* --- 8. ESTILOS DEL MODAL (POP-UP) --- */
+.modal-overlay {
+    position: fixed; /* Se queda fijo en la pantalla */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7); /* Fondo oscuro semitransparente */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000; /* Se pone por encima de todo */
+}
+
+.modal-content {
+    background: var(--color-white);
+    padding: 30px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.modal-content h2 {
+    font-size: 1.5em;
+    font-weight: 700;
+    color: var(--color-black);
+    margin-bottom: 15px;
+}
+
+.modal-content p {
+    font-size: 1.1em;
+    color: var(--color-text-dark);
+    margin-bottom: 25px;
+}
+
+/* Estilos de las opciones del Quiz */
+.quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+.quiz-option-btn {
+    background-color: var(--color-bg-gray);
+    border: 2px solid var(--color-border);
+    padding: 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+.quiz-option-btn:hover {
+    background-color: #e0e0e0;
+}
+
+/* Cuando una opción es seleccionada */
+.quiz-option-btn.selected {
+    background-color: var(--color-black);
+    color: var(--color-white);
+    border-color: var(--color-black);
+}
+
+/* Estilos de los botones del modal */
+#quiz-next-btn, #quiz-close-btn {
+    width: 100%;
+    background-color: var(--color-red);
+    color: var(--color-white);
+    border: none;
+    padding: 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 700;
+    font-size: 1em;
+}
+#quiz-close-btn {
+    background-color: var(--color-text-light);
+    margin-top: 10px;
+}
+
+/* Botón de aceptar misión */
+.mission-accept-btn {
+    background-color: var(--color-red);
+    color: var(--color-white);
+    border: none;
+    padding: 8px 12px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 700;
+    margin-left: auto; /* Empuja el botón a la derecha */
+    white-space: nowrap;
+}
+.mission-item {
+    align-items: center; /* Centra verticalmente los items */
+}
+
+/* --- 8. ESTILOS DE BOTONES DE NAVEGACIÓN --- */
+.nav-menu .nav-btn {
+    padding: 10px 15px;
+    margin-right: 10px;
+    text-decoration: none;
+    font-weight: 700;
+    color: var(--color-text-light);
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+.nav-menu .nav-btn:hover {
+    background-color: var(--color-bg-gray);
+    color: var(--color-black);
+}
+/* Estilo del botón activo (en la página actual) */
+.nav-menu .nav-btn.active {
+    background-color: var(--color-red);
+    color: var(--color-white);
+}
+
+/* dashboard-style.css (al final) */
+
+/* Estilo para la nueva tarjeta-enlace de misiones */
+.mission-link-card {
+    background-color: var(--color-white);
+    padding: 25px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    margin-top: 30px;
+    border: 2px dashed var(--color-border);
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.mission-link-card:hover {
+    border-color: var(--color-red);
+    box-shadow: 0 6px 15px rgba(204, 51, 51, 0.1);
+}
+.mission-link-card h2 {
+    font-size: 1.3em;
+    font-weight: 700;
+    color: var(--color-black);
+    margin-bottom: 10px;
+}
+.mission-link-card p {
+    font-size: 1em;
+    color: var(--color-text-light);
+    margin-bottom: 20px;
+}
+/* Reutilizamos el estilo .widget-btn que ya existe */
+.mission-link-card .widget-btn {
+    background-color: var(--color-red);
+}

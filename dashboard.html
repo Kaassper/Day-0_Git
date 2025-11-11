@@ -16,6 +16,8 @@
         </div>
         <div class="nav-menu">
             <span id="nav-username"></span>
+            <a href="dashboard.html" class="nav-btn active">Panel</a>
+            <a href="missions.html" class="nav-btn">Misiones</a>
             <button id="logout-button" class="logout-btn">Cerrar Sesión</button>
         </div>
     </nav>
@@ -25,11 +27,11 @@
         <h1 id="welcome-title">¡Hola, ...!</h1>
 
         <div class="widgets-grid">
-
             <div class="widget points-card">
                 <h2>Inacapuntos</h2>
                 <div class="points-display">
-                    <span class="coin-icon">💰</span> <span id="points-amount">1782</span>
+                    <span class="coin-icon">💰</span>
+                    <span id="points-amount"></span>
                 </div>
             </div>
 
@@ -38,91 +40,72 @@
                 <p>Explora la sede y encuentra tus salas.</p>
                 <button class="widget-btn">Ver Mapa</button>
             </div>
+        </div> 
 
-        </div> <div class="mission-section">
-            <h2>Misión en Marcha...</h2>
-            <div class="mission-list">
-                
-                <div class="mission-item completed">
-                    <span class="mission-icon">✅</span>
-                    <div class="mission-details">
-                        <h3>Visita la Biblioteca</h3>
-                        <p>Estado: Completado</p>
-                    </div>
-                </div>
-
-                <div class="mission-item in-progress">
-                    <span class="mission-icon">🏃‍♂️</span>
-                    <div class="mission-details">
-                        <h3>Dirígete a DAE</h3>
-                        <p>Estado: En Progreso</p>
-                    </div>
-                </div>
-                
-                <div class="mission-item locked">
-                    <span class="mission-icon">🔒</span>
-                    <div class="mission-details">
-                        <h3>Encuentra el CoWork</h3>
-                        <p>Estado: Bloqueado</p>
-                    </div>
-                </div>
-
-            </div>
+        <div class="widget mission-link-card" onclick="location.href='missions.html'">
+            <h2>Ruta de Misiones</h2>
+            <p>Estado: ¡Misión "Conoce tu Sede" en progreso!</p>
+            <button class="widget-btn">¡Ver mis Misiones!</button>
         </div>
 
     </main>
 
     <script>
-        // 1. Se ejecuta apenas carga la página
-        document.addEventListener('DOMContentLoaded', () => {
-            const token = localStorage.getItem('accessToken');
-            const username = localStorage.getItem('username');
+    document.addEventListener('DOMContentLoaded', () => {
 
-            // 2. PROTECCIÓN DE RUTA: Si no hay token, lo expulsa al login
-            if (!token) {
-                window.location.href = 'login.html';
-                return; // Detiene la ejecución
-            }
+        // --- A. LÓGICA DE PROTECCIÓN Y SALUDO ---
+        const token = localStorage.getItem('accessToken');
 
-            // 3. PERSONALIZACIÓN: Saluda al usuario
-            if (username) {
-                document.getElementById('welcome-title').textContent = `¡Hola, ${username}!`;
-                document.getElementById('nav-username').textContent = `Usuario: ${username}`;
-            }
+        if (!token) {
+            window.location.href = 'login.html';
+            return;
+        }
 
-            // 4. (FUTURO) Aquí es donde harías el fetch a tu backend
-            // para obtener los Inacapuntos y las misiones reales.
-            // fetchUserData(token); 
+        // ▼▼▼ ¡ESTA ES LA LLAMADA CLAVE QUE FALTABA! ▼▼▼
+        // Llama al backend para traer los puntos y el nombre real
+        fetchUserData(token); 
+        
+        // --- B. FUNCIONALIDAD DE LOGOUT ---
+        document.getElementById('logout-button').addEventListener('click', () => {
+            localStorage.clear();
+            window.location.href = 'login.html';
         });
 
-        /*
-        // (FUTURO) Función para cargar datos del backend
+        // --- C. FUNCIÓN PARA OBTENER DATOS DEL USUARIO ---
         async function fetchUserData(token) {
             try {
                 const response = await fetch('http://localhost:5000/api/users/me', {
-                    headers: { 'Authorization': `Bearer ${token}` }
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}` // Envía el token para la autenticación
+                    }
                 });
+
                 if (response.ok) {
-                    const data = await response.json();
-                    document.getElementById('points-amount').textContent = data.puntos;
-                    // ...aquí cargarías la lista de misiones...
-                } else {
-                    // Si el token es inválido, lo expulsa
+                    const userData = await response.json();
+                    
+                    // ¡AQUÍ ACTUALIZAMOS EL HTML!
+                    // 1. Reemplaza el "1782" con los puntos de la BD
+                    document.getElementById('points-amount').textContent = userData.puntos;
+
+                    // 2. Actualiza el saludo con el nombre de la BD
+                    document.getElementById('welcome-title').textContent = `¡Hola, ${userData.username}!`;
+                    document.getElementById('nav-username').textContent = `Usuario: ${userData.username}`;
+
+                } else if (response.status === 401) {
+                    // Token inválido o expirado
+                    console.log("Token inválido. Redirigiendo al login.");
                     localStorage.clear();
                     window.location.href = 'login.html';
                 }
+
             } catch (error) {
-                console.error("Error al cargar datos:", error);
+                console.error("Error al cargar datos del usuario:", error);
             }
         }
-        */
 
-        // 5. FUNCIONALIDAD DE LOGOUT
-        document.getElementById('logout-button').addEventListener('click', () => {
-            localStorage.clear(); // Borra el token y el username
-            window.location.href = 'login.html'; // Lo envía al login
-        });
-
+    }); // <-- FIN DEL 'DOMContentLoaded'
     </script>
+
 </body>
 </html>

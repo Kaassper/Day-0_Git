@@ -1,0 +1,303 @@
+/* --- 1. IMPORTAMOS LA FUENTE Y VARIABLES (Opcional, pero recomendado) --- */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;700&display=swap');
+
+:root {
+    --color-red: #cc3333;
+    --color-black: #000000;
+    --color-white: #ffffff;
+    --color-bg-gray: #f4f7f6;
+    --color-border: #eeeeee;
+    --color-green-completed: #28a745;
+    --color-blue-active: #007bff;
+    --color-gray-locked: #bbbbbb;
+}
+
+/* --- 2. ESTILOS DEL CAMINO DE MISIONES --- */
+.main-container h1 {
+    text-align: center;
+    font-size: 2em;
+    font-weight: 700;
+    color: var(--color-black);
+    margin-bottom: 30px;
+}
+
+.mission-path {
+    display: flex;
+    flex-direction: column; /* Apila las misiones verticalmente */
+    align-items: center; /* Centra las misiones */
+    gap: 30px; /* Espacio entre nodos */
+    padding: 20px 0;
+    position: relative; /* Contenedor para las líneas */
+}
+
+/* --- 3. DIBUJAMOS LA LÍNEA DEL CAMINO --- */
+/* Dibuja una línea gris punteada en el centro */
+.mission-path::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    background: repeating-linear-gradient(
+        0deg,
+        var(--color-gray-locked),
+        var(--color-gray-locked) 10px,
+        transparent 10px,
+        transparent 20px
+    );
+    z-index: 1; /* Detrás de los nodos */
+}
+
+/* --- 4. ESTILOS DEL NODO DE MISIÓN (La "burbuja") --- */
+.mission-node {
+    width: 280px;
+    background: var(--color-white);
+    border: 2px solid var(--color-border);
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    z-index: 2; /* Por encima de la línea */
+    transition: all 0.3s ease;
+    position: relative; /* Para alinear con la línea */
+}
+
+.node-icon {
+    font-size: 3em;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.mission-node h3 {
+    font-size: 1.3em;
+    font-weight: 700;
+    color: var(--color-black);
+    margin-bottom: 5px;
+}
+
+.mission-node p {
+    font-size: 0.9em;
+    color: #555;
+    margin-bottom: 15px;
+}
+
+.mission-btn {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 700;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+/* --- 5. ESTILOS DE ESTADO (Completado, Activo, Bloqueado) --- */
+
+/* NODO COMPLETADO */
+.mission-node.completed {
+    border-color: var(--color-green-completed);
+}
+.mission-node.completed .mission-btn {
+    background-color: var(--color-green-completed);
+    color: var(--color-white);
+}
+
+/* NODO ACTIVO (el actual) */
+.mission-node.active {
+    border-color: var(--color-red);
+    transform: scale(1.05); /* Lo hace resaltar */
+    box-shadow: 0 0 20px rgba(204, 51, 51, 0.4);
+}
+.mission-node.active .mission-btn {
+    background-color: var(--color-red);
+    color: var(--color-white);
+}
+
+/* NODO BLOQUEADO */
+.mission-node.locked {
+    background-color: var(--color-bg-gray);
+    opacity: 0.6;
+}
+.mission-node.locked .mission-btn {
+    background-color: var(--color-gray-locked);
+    color: #f9f9f9;
+    cursor: not-allowed;
+}
+
+/* Nodo de Recompensa (Cofre) */
+.mission-node.special {
+    background-color: #fffbeb; /* Un amarillo pálido */
+    border-color: #f9ca24;
+}
+
+/* --- 6. ESTILOS DEL MODAL (POP-UP) --- */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: var(--color-white);
+    padding: 30px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 500px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+}
+
+.modal-content h2 {
+    font-size: 1.5em;
+    font-weight: 700;
+    color: var(--color-black);
+    margin-bottom: 15px;
+}
+
+.modal-content p {
+    font-size: 1.1em;
+    color: #333;
+    margin-bottom: 25px;
+}
+
+.quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+.quiz-option-btn {
+    background-color: var(--color-bg-gray);
+    border: 2px solid var(--color-border);
+    padding: 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+.quiz-option-btn:hover {
+    background-color: #e0e0e0;
+}
+.quiz-option-btn.selected {
+    background-color: var(--color-black);
+    color: var(--color-white);
+    border-color: var(--color-black);
+}
+
+#quiz-next-btn, #quiz-close-btn {
+    width: 100%;
+    background-color: var(--color-red);
+    color: var(--color-white);
+    border: none;
+    padding: 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 700;
+    font-size: 1em;
+}
+#quiz-close-btn {
+    background-color: #777;
+    margin-top: 10px;
+}
+
+/* --- 7. ESTILOS DEL MODAL DE INFORMACIÓN (BRIEFING) --- */
+
+/* Estilos para los nuevos botones (Salir / Comenzar) */
+.briefing-buttons {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+/* Botón de Comenzar (Rojo) */
+.modal-btn-start {
+    flex: 1; /* Ocupa la mitad del espacio */
+    background-color: var(--color-red);
+    color: var(--color-white);
+    border: none;
+    padding: 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 700;
+    font-size: 1em;
+}
+
+/* Botón de Salir (Gris) */
+.modal-btn-exit {
+    flex: 1; /* Ocupa la mitad del espacio */
+    background-color: #aaa; /* Color gris para "Salir" */
+    color: var(--color-white);
+    border: none;
+    padding: 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 700;
+    font-size: 1em;
+}
+
+.modal-btn-start:hover {
+    background-color: #a32929; /* Rojo más oscuro */
+}
+.modal-btn-exit:hover {
+    background-color: #888; /* Gris más oscuro */
+}
+
+/* --- 8. ESTILOS DE LA BARRA DE PUNTAJE FINAL --- */
+#quiz-final-score {
+    margin-top: 20px;
+    width: 100%;
+}
+
+#quiz-score-text {
+    font-size: 1.1em;
+    font-weight: 700;
+    color: var(--color-black);
+    margin-bottom: 10px;
+}
+
+/* El fondo gris de la barra */
+.progress-bar-container {
+    width: 100%;
+    height: 30px;
+    background-color: var(--color-bg-gray);
+    border: 1px solid var(--color-border);
+    border-radius: 15px;
+    overflow: hidden; 
+}
+
+/* El relleno de la barra */
+#progress-bar-fill {
+    height: 100%;
+    width: 0%; /* Inicia en 0% */
+    background-color: var(--color-green-completed); /* Verde */
+    border-radius: 15px;
+    transition: width 0.5s ease;
+    
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-white);
+    font-weight: 700;
+}
+
+/* Clase para la barra si el puntaje es bajo */
+#progress-bar-fill.fail {
+    background-color: var(--color-red); /* Rojo */
+}
