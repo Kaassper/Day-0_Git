@@ -350,3 +350,10 @@ body {
 .mission-link-card .widget-btn {
     background-color: var(--color-red);
 }
+
+/* Estilos para el modal QR */
+#reader {
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 15px;
+}
