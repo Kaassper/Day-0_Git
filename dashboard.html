@@ -74,7 +74,7 @@
         // --- C. FUNCIÓN PARA OBTENER DATOS DEL USUARIO ---
         async function fetchUserData(token) {
             try {
-                const response = await fetch('https://day-0-git.onrender.com', {
+                const response = await fetch('https://day-0-git.onrender.com/api/users/me', {
                     method: 'GET',
                     headers: {
                         'Authorization': `Bearer ${token}` // Envía el token para la autenticación
