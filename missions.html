@@ -308,7 +308,7 @@
             async function completeMissionOnBackend(missionName, pointsToAdd) {
                 const token = localStorage.getItem('accessToken');
                 try {
-                    const response = await fetch('http://localhost:5000/api/missions/complete', {
+                    const response = await fetch('https://day-0-git.onrender.com', {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
