@@ -11,7 +11,7 @@ const UserSchema = new mongoose.Schema({
     bio: { type: String, default: "" },
 
     // Estadísticas
-    rutas_completas: [{ type: String }], // Puedes usar [Schema.Types.ObjectId, ref: 'Ruta'] si tienes un modelo Ruta
+    rutas_completas: { type: [String], default: [] }, // Puedes usar [Schema.Types.ObjectId, ref: 'Ruta'] si tienes un modelo Ruta
     rutas_en_progreso: [{ type: String }],
 
 }, { timestamps: true });
