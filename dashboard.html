@@ -7,6 +7,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="dashboard-style.css">
     <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+
 </head>
 <body>
 
@@ -21,7 +22,7 @@
             <a href="missions.html" class="nav-btn">Misiones</a>
             <button id="logout-button" class="logout-btn">Cerrar Sesión</button>
         </div>
-    </nav>
+    </nav>  
 
     <main class="main-container">
 
@@ -75,16 +76,19 @@
     
             fetchUserData(token);
 
-        // --- LÓGICA QR ---
+        // --- LÓGICA QR (CORREGIDA Y ROBUSTA) ---
         const qrModal = document.getElementById('qr-modal');
-        const successModal = document.getElementById('success-modal'); // Nuevo modal
+        const successModal = document.getElementById('success-modal');
         const btnScanQr = document.getElementById('btn-scan-qr');
         const btnCloseQr = document.getElementById('close-qr-btn');
         const qrResultText = document.getElementById('qr-result-text');
+        
         let html5QrcodeScanner = null;
 
         btnScanQr.addEventListener('click', () => {
+            // 1. Primero mostramos el modal para que el div "reader" sea visible
             qrModal.style.display = 'flex';
+            // 2. Luego iniciamos el escáner
             startScanner();
         });
 
@@ -93,24 +97,79 @@
             qrModal.style.display = 'none';
         });
 
-        // Función global para cerrar el modal de éxito
         window.closeSuccessModal = function() {
             successModal.style.display = 'none';
-            qrModal.style.display = 'none'; // Cierra también la cámara
+            qrModal.style.display = 'none';
+            // Aseguramos que la cámara se apague al cerrar el éxito
+            stopScanner();
         };
 
         function startScanner() {
-            // Configuramos el escáner
-            html5QrcodeScanner = new Html5QrcodeScanner(
-                "reader", { fps: 10, qrbox: 250 }
-            );
-            html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+            // Si ya existe una instancia, no creamos otra
+            if (html5QrcodeScanner) {
+                // Opcional: reiniciar si es necesario, pero mejor limpiar primero
+                return; 
+            }
+            
+            try {
+                html5QrcodeScanner = new Html5QrcodeScanner(
+                    "reader", 
+                    { fps: 10, qrbox: 250 }
+                );
+                html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+            } catch (err) {
+                console.error("Error al iniciar cámara:", err);
+                qrResultText.textContent = "Error al acceder a la cámara. Verifica permisos.";
+            }
         }
 
         function stopScanner() {
             if (html5QrcodeScanner) {
-                html5QrcodeScanner.clear().catch(error => console.error(error));
+                try {
+                    html5QrcodeScanner.clear().then(() => {
+                        html5QrcodeScanner = null; // Limpiamos la variable
+                    }).catch(error => {
+                        console.error("Fallo al limpiar escáner.", error);
+                    });
+                } catch (err) {
+                    console.log("El escáner ya estaba inactivo");
+                }
             }
+        }
+
+        async function onScanSuccess(decodedText, decodedResult) {
+            // 1. Pausar/Limpiar inmediatamente
+            stopScanner(); 
+            qrResultText.textContent = "Procesando...";
+
+            let missionId = decodedText;
+            let points = 50; 
+            let message = "¡Código escaneado exitosamente!";
+
+            try {
+                const data = JSON.parse(decodedText);
+                if(data.id && data.puntos) {
+                    missionId = data.id;
+                    points = data.puntos;
+                    message = data.mensaje || message;
+                }
+            } catch (e) { console.log("QR simple detectado"); }
+            
+            const result = await completeMissionOnBackend(missionId, points);
+            
+            if (result.success) {
+                document.getElementById('success-modal-msg').textContent = message;
+                document.getElementById('success-modal-points').textContent = points;
+                successModal.style.display = 'flex';
+                fetchUserData(token); 
+            } else {
+                alert("Aviso: " + result.message);
+                qrModal.style.display = 'none';
+            }
+        }
+
+        function onScanFailure(error) {
+            // console.warn(`Error de escaneo: ${error}`);
         }
 
         async function onScanSuccess(decodedText, decodedResult) {
