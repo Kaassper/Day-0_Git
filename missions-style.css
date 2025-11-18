@@ -301,3 +301,59 @@
 #progress-bar-fill.fail {
     background-color: var(--color-red); /* Rojo */
 }
+
+/* missions-style.css (Al final) */
+
+/* Botón de Repaso (Azul) */
+.modal-btn-review {
+    flex: 1;
+    background-color: #007bff; /* Azul */
+    color: var(--color-white);
+    border: none;
+    padding: 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 700;
+    font-size: 1em;
+}
+.modal-btn-review:hover {
+    background-color: #0056b3;
+}
+
+/* Estilos para el contenido de estudio */
+.study-content-box {
+    max-width: 600px; /* Un poco más ancho para leer mejor */
+    text-align: left; /* Texto alineado a la izquierda */
+}
+
+.study-content-box h2 {
+    text-align: center;
+    color: var(--color-red);
+}
+
+.scrollable-content {
+    max-height: 300px; /* Altura máxima */
+    overflow-y: auto; /* Barra de scroll si el texto es largo */
+    background: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    font-size: 0.95em;
+    line-height: 1.6;
+    color: #333;
+}
+
+/* Formato básico para el texto HTML inyectado */
+.scrollable-content strong {
+    color: var(--color-black);
+}
+.scrollable-content ul {
+    margin-left: 20px;
+    margin-bottom: 10px;
+}
+.scrollable-content h4 {
+    margin-top: 15px;
+    margin-bottom: 5px;
+    color: var(--color-red);
+}

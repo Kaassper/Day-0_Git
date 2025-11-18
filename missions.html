@@ -31,14 +31,14 @@
             <div class="mission-node active" id="node-modulo-1">
                 <span class="node-icon">📚</span>
                 <h3>Módulo 1: Inducción</h3>
-                <p>Conoce lo básico de tu sede.</p>
+                <p>Ubicación de áreas clave en la sede.</p>
                 <button class="mission-btn" onclick="openModule('modulo1')">Comenzar Módulo</button>
             </div>
 
             <div class="mission-node locked" id="node-modulo-2">
                 <span class="node-icon">🎓</span>
                 <h3>Módulo 2: Vida Académica</h3>
-                <p>Aprende sobre DAE y tus beneficios.</p>
+                <p>Reglamentos, DAE y beneficios.</p>
                 <button class="mission-btn" disabled onclick="openModule('modulo2')">Bloqueado</button>
             </div>
             
@@ -56,15 +56,27 @@
         <div class="modal-content">
             <h2 id="briefing-title"></h2>
             <p id="briefing-desc"></p>
+            
             <div class="briefing-buttons">
                 <button id="briefing-exit-btn" class="modal-btn-exit">Salir</button>
+                <button id="briefing-review-btn" class="modal-btn-review">📖 Repasar</button>
                 <button id="briefing-start-btn" class="modal-btn-start">¡Comenzar!</button>
             </div>
         </div>
     </div>
 
+    <div id="study-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-content study-content-box">
+            <h2>Material de Estudio</h2>
+            <div id="study-content-text" class="scrollable-content">
+                </div>
+            <button id="study-close-btn" class="widget-btn" style="margin-top: 15px;">¡Listo, volver al menú!</button>
+        </div>
+    </div>
+
     <div id="quiz-modal" class="modal-overlay" style="display: none;">
         <div class="modal-content">
+            
             <div id="quiz-step-info">
                 <h2 id="quiz-info-title"></h2>
                 <p id="quiz-info-text"></p>
@@ -75,38 +87,76 @@
                     </div>
                 </div>
             </div>
+            
             <div id="quiz-step-question" style="display: none;">
                 <h2 id="quiz-question-text"></h2>
                 <div id="quiz-options-container" class="quiz-options"></div>
             </div>
+            
             <button id="quiz-next-btn">Siguiente</button>
             <button id="quiz-close-btn" style="display: none;">Cerrar</button>
         </div>
     </div>
 
     <script>
-        // DATOS DE LOS MÓDULOS (7 PREGUNTAS CADA UNO)
+        // --- BASE DE DATOS DE PREGUNTAS Y MATERIAL DE ESTUDIO ---
         const modulesData = {
             "modulo1": {
                 title: "Módulo 1: Inducción",
                 desc: "Este módulo cubre la ubicación de las áreas clave de la sede. Debes acertar al menos el 80% de las 7 preguntas.",
+                studyContent: `
+                    <h4>🏢 Primer Piso (Nivel 1)</h4>
+                    <ul>
+                        <li><strong>DAE:</strong> Aquí obtienes tu TNE y ayudas estudiantiles.</li>
+                        <li><strong>Curricular:</strong> Certificados y temas de asignaturas.</li>
+                    </ul>
+                    <h4>🛠️ Piso Subterráneo (Nivel -1)</h4>
+                    <ul>
+                        <li><strong>Talleres:</strong> Mecánica, Electrónica y Diseño.</li>
+                    </ul>
+                    <h4>👨‍🏫 Segundo Piso (Nivel 2)</h4>
+                    <ul>
+                        <li><strong>Directores de Carrera:</strong> Sus oficinas están aquí.</li>
+                    </ul>
+                    <h4>💻 Tercer Piso (Nivel 3)</h4>
+                    <ul>
+                        <li><strong>Co-Work:</strong> Espacio de trabajo colaborativo.</li>
+                        <li><strong>Kiosco:</strong> Zona de alimentación.</li>
+                    </ul>
+                    <h4>📚 Biblioteca</h4>
+                    <p>Horario: <strong>8:00 a 22:00 horas</strong>.</p>
+                `,
                 questions: [
                     { q: "¿En qué piso está el DAE?", options: ["Piso 1", "Piso 2", "Piso -1"], ans: "Piso 1" },
                     { q: "¿Dónde sacas la TNE?", options: ["Biblioteca", "DAE", "Kiosco"], ans: "DAE" },
                     { q: "¿Dónde están los directores de carrera?", options: ["Piso 2", "Piso 3", "Piso 1"], ans: "Piso 2" },
                     { q: "¿Qué hay en el piso 3?", options: ["Talleres", "Co-Work", "Casino"], ans: "Co-Work" },
                     { q: "¿Dónde están los talleres mecánicos?", options: ["Piso -1", "Piso 1", "Patio"], ans: "Piso -1" },
-                    { q: "¿Cuál es el horario de biblioteca?", options: ["24/7", "8:00 a 22:00", "9:00 a 18:00"], ans: "8:00 a 22:00" }, // Ejemplo
+                    { q: "¿Cuál es el horario de biblioteca?", options: ["24/7", "8:00 a 22:00", "9:00 a 18:00"], ans: "8:00 a 22:00" },
                     { q: "¿Dónde pides ayuda académica?", options: ["Curricular", "Guardia", "Kiosco"], ans: "Curricular" }
                 ]
             },
             "modulo2": {
                 title: "Módulo 2: Vida Académica",
-                desc: "Preguntas sobre reglamentos y beneficios.",
+                desc: "Preguntas sobre reglamentos y beneficios. ¡Repasa los conceptos clave!",
+                studyContent: `
+                    <h4>📝 Carga Académica</h4>
+                    <p>Son las <strong>asignaturas inscritas</strong> en tu semestre.</p>
+                    <h4>🌐 Intranet</h4>
+                    <p>Plataforma para ver <strong>notas</strong>, horario y asistencia.</p>
+                    <h4>✅ Asistencia</h4>
+                    <p>Mínimo para aprobar: <strong>60%</strong> (revisar reglamento específico).</p>
+                    <h4>📜 RAA</h4>
+                    <p><strong>Reglamento Académico del Alumno</strong>: tus derechos y deberes.</p>
+                    <h4>💰 CAE</h4>
+                    <p>Trámites de crédito y becas se ven en el <strong>DAE</strong>.</p>
+                    <h4>⚠️ Reprobación</h4>
+                    <p>Reprobar 3 veces la misma asignatura es causal de <strong>Eliminación</strong>.</p>
+                `,
                 questions: [
-                    { q: "¿Qué es la carga académica?", options: ["Peso de mochila", "Asignaturas inscritas", "Estrés"], ans: "Asignaturas inscritas" },
+                    { q: "¿Qué es la carga académica?", options: ["Mochila", "Asignaturas inscritas", "Estrés"], ans: "Asignaturas inscritas" },
                     { q: "¿Dónde ves tus notas?", options: ["Intranet", "Diario mural", "Secretaría"], ans: "Intranet" },
-                    { q: "¿Cuanto asistencia necesitas para aprobar?", options: ["50%", "60%", "No importa"], ans: "60%" }, // Ejemplo
+                    { q: "¿Cuanto asistencia necesitas para aprobar?", options: ["50%", "60%", "No importa"], ans: "60%" },
                     { q: "¿Qué es el RAA?", options: ["Un robot", "Reglamento Académico", "Red de Alumnos"], ans: "Reglamento Académico" },
                     { q: "¿Dónde renuevas el CAE?", options: ["DAE", "Finanzas", "Biblioteca"], ans: "DAE" },
                     { q: "¿Qué pasa si repruebas 3 veces?", options: ["Nada", "Eliminación", "Premio"], ans: "Eliminación" },
@@ -121,7 +171,7 @@
         let score = 0;
         let selectedAnswer = null;
 
-        // --- INICIO DEL SCRIPT ---
+        // --- INICIALIZACIÓN ---
         document.addEventListener('DOMContentLoaded', () => {
             const token = localStorage.getItem('accessToken');
             const username = localStorage.getItem('username');
@@ -133,19 +183,20 @@
                 localStorage.clear(); window.location.href = 'login.html';
             });
 
-            loadModulesStatus(token); // Cargar qué módulos ya completó
+            loadModulesStatus(token); // Carga el progreso desde la nube
         });
 
-        // --- FUNCIONES GLOBALES (Para el onclick del HTML) ---
+        // --- FUNCIONES DE APERTURA DE MÓDULO ---
         window.openModule = function(moduleId) {
             currentModuleId = moduleId;
             const data = modulesData[moduleId];
             currentModuleQuestions = data.questions;
 
-            // Configurar Briefing
+            // Llenar Briefing
             document.getElementById('briefing-title').textContent = data.title;
             document.getElementById('briefing-desc').textContent = data.desc;
             
+            // Configurar Botones
             document.getElementById('briefing-start-btn').onclick = function() {
                 document.getElementById('briefing-modal').style.display = 'none';
                 startQuiz();
@@ -153,9 +204,22 @@
             document.getElementById('briefing-exit-btn').onclick = function() {
                 document.getElementById('briefing-modal').style.display = 'none';
             };
+            
+            // Botón REPASAR
+            document.getElementById('briefing-review-btn').onclick = function() {
+                document.getElementById('briefing-modal').style.display = 'none';
+                document.getElementById('study-modal').style.display = 'flex';
+                document.getElementById('study-content-text').innerHTML = data.studyContent;
+            };
 
             document.getElementById('briefing-modal').style.display = 'flex';
         }
+
+        // Botón cerrar estudio
+        document.getElementById('study-close-btn').addEventListener('click', () => {
+            document.getElementById('study-modal').style.display = 'none';
+            document.getElementById('briefing-modal').style.display = 'flex';
+        });
 
         // --- LÓGICA DEL QUIZ ---
         const quizModal = document.getElementById('quiz-modal');
@@ -165,9 +229,8 @@
         nextBtn.addEventListener('click', nextStep);
         closeBtn.addEventListener('click', () => {
             quizModal.style.display = 'none';
-            // Recargar estado para desbloquear siguiente si aprobó
             const token = localStorage.getItem('accessToken');
-            loadModulesStatus(token); 
+            loadModulesStatus(token); // Recargar para desbloquear si corresponde
         });
 
         function startQuiz() {
@@ -207,7 +270,6 @@
         function nextStep() {
             if (!selectedAnswer) { alert("Elige una opción"); return; }
             
-            // Verificar respuesta
             if (selectedAnswer === currentModuleQuestions[currentStep].ans) {
                 score++;
             }
@@ -235,7 +297,7 @@
             const bar = document.getElementById('progress-bar-fill');
             
             scoreBlock.style.display = 'block';
-            document.getElementById('quiz-score-text').textContent = `${score}/${total} (${percentage.toFixed(0)}%)`;
+            document.getElementById('quiz-score-text').textContent = `${score}/${total} correctas (${percentage.toFixed(0)}%)`;
             bar.style.width = `${percentage}%`;
             bar.textContent = `${percentage.toFixed(0)}%`;
 
@@ -243,12 +305,11 @@
                 bar.classList.remove('fail');
                 title.textContent = "¡Módulo Aprobado!";
                 text.textContent = "Has desbloqueado el siguiente nivel.";
-                // Guardar en backend
-                completeMissionOnBackend(currentModuleId, 200); // 200 puntos por módulo
+                completeMissionOnBackend(currentModuleId, 200); // Guardar progreso
             } else {
                 bar.classList.add('fail');
                 title.textContent = "Módulo Reprobado";
-                text.textContent = "Necesitas un 80% para aprobar. Inténtalo de nuevo.";
+                text.textContent = "Necesitas un 80% para aprobar. ¡Repasa y vuelve a intentar!";
             }
         }
 
@@ -261,7 +322,6 @@
                     const user = await res.json();
                     const completed = user.rutas_completas || [];
 
-                    // Lógica de desbloqueo
                     if (completed.includes("modulo1")) {
                         markAsCompleted("node-modulo-1", "modulo1");
                         unlock("node-modulo-2", "modulo2");
@@ -270,7 +330,6 @@
                         markAsCompleted("node-modulo-2", "modulo2");
                         unlock("node-modulo-3", "modulo3");
                     }
-                    // etc...
                 }
             } catch (e) { console.error(e); }
         }
@@ -294,7 +353,6 @@
                 const btn = node.querySelector('button');
                 btn.textContent = "Comenzar Módulo";
                 btn.disabled = false;
-                // Actualiza el onclick para asegurar que apunte al módulo correcto
                 btn.onclick = function() { openModule(modId); }; 
             }
         }
