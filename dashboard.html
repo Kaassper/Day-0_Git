@@ -153,9 +153,39 @@
             }
         }
 
-        function onScanFailure(error) {
-            // console.warn(`Code scan error = ${error}`);
+        async function onScanSuccess(decodedText, decodedResult) {
+        stopScanner(); 
+        qrResultText.textContent = "Procesando...";
+
+        let missionId = decodedText;
+        let points = 50; 
+        let successMsg = "¡Código escaneado exitosamente!";
+
+        try {
+            const data = JSON.parse(decodedText);
+            if(data.id && data.puntos) {
+                missionId = data.id;
+                points = data.puntos;
+                successMsg = data.mensaje || successMsg;
+            }
+        } catch (e) { console.log("QR simple"); }
+        
+        // Llamamos al backend
+        const result = await completeMissionOnBackend(missionId, points);
+        
+        if (result.success) {
+            // ÉXITO: Mostrar modal bonito
+            document.getElementById('success-modal-msg').textContent = successMsg;
+            document.getElementById('success-modal-points').textContent = points;
+            document.getElementById('success-modal').style.display = 'flex';
+            fetchUserData(token); 
+        } else {
+            // ERROR (YA ESCANEADO): Mostrar alerta con el mensaje del backend
+            alert("Aviso: " + result.message); 
+            // "¡Ya completaste esta misión anteriormente!..."
+            qrModal.style.display = 'none';
         }
+    }
 
         // --- FUNCIONES EXISTENTES ---
         document.getElementById('logout-button').addEventListener('click', () => {
@@ -178,15 +208,26 @@
         }
 
         async function completeMissionOnBackend(missionName, pointsToAdd) {
-            try {
-                const response = await fetch('https://day-0-git.onrender.com/api/missions/complete', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
-                    body: JSON.stringify({ missionName: missionName, pointsToAdd: pointsToAdd })
-                });
-                return response.ok;
-            } catch (error) { return false; }
+        try {
+            const response = await fetch('https://day-0-git.onrender.com/api/missions/complete', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+                body: JSON.stringify({ missionName: missionName, pointsToAdd: pointsToAdd })
+            });
+
+            const data = await response.json(); // Leemos la respuesta siempre
+
+            if (!response.ok) {
+                // Si falló (ej. ya escaneado), devolvemos success: false y el mensaje del servidor
+                return { success: false, message: data.message };
+            }
+            
+            return { success: true, message: data.message };
+
+        } catch (error) { 
+            return { success: false, message: "Error de conexión con el servidor." }; 
         }
+    }
             });
     </script>
 
