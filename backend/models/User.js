@@ -5,9 +5,15 @@ const UserSchema = new mongoose.Schema({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     puntos: { type: Number, default: 0 },
+
+    // CAMPOS DE RECUPERACIÓN (NUEVOS)
+    resetPasswordToken: String,
+    resetPasswordExpires: Date,
     
     // Esta es la línea que cambiamos para arreglar el array
     rutas_completas: { type: [String], default: [] }
+
+    
 
 }, { timestamps: true });
 
