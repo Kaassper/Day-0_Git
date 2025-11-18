@@ -34,6 +34,6 @@ app.use("/api/users", userRoute);
 
 // --- 5. Iniciar el Servidor ---
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => { // <--- AÑADE '0.0.0.0' AQUÍ
     console.log(`🚀 Backend corriendo en el puerto ${PORT}`);
 });
